@@ -1,0 +1,132 @@
+﻿@model JNGH_IDENDITY.Models.CreateUser
+
+@{
+    ViewData["Title"] = "CreateUser";
+}
+
+<link href="~/lib/chosen/bootstrap-chosen.css" rel="stylesheet">
+<link href="~/lib/chosen/chosen.css" rel="stylesheet">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>开设账户</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="index.html">主页</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>权限管理</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>用户管理</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>开设账户</a>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight ecommerce" style="overflow:auto">
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-md-12">
+
+                <form asp-action="CreateUser">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label asp-for="UserName" class="col-sm-2 col-form-label">登录账号</label>
+                            <div class="col-sm-10">
+                                <input asp-for="UserName" class="form-control" />
+                            </div>
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="Password" class="col-sm-2 col-form-label">密码</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Password" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="ConfirmPassword" class="col-sm-2 col-form-label">确认密码</label>
+                            <div class="col-sm-10">
+                                <input asp-for="ConfirmPassword" class="form-control" />
+                            </div>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">员工</label>
+                            <div class="col-sm-10">
+                                <div class="control-label">
+                                    @Html.DropDownList("EmpNo", ViewBag.EmpList as IEnumerable<SelectListItem>, new { @class = "form-control m-b", default_multiple_text = "--请选择--" })
+                                </div>
+                            </div>
+                            <span asp-validation-for="EmpNo" class="text-danger"></span>
+                            <div class="text-danger"> @Html.ValidationMessage("EmployNoUserExist")</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">角色</label>
+                            <div class="col-sm-10">
+                                <div class="control-label">
+                                    @Html.DropDownList("RoleIds", ViewBag.RoleList as IEnumerable<SelectListItem>, new { @class = "form-control chosen ", multiple = "multiple" })
+                                </div>
+                            </div>
+                            <span asp-validation-for="RoleIds" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <label asp-for="PhoneNumber" class="col-sm-2 col-form-label">电话</label>
+                            <div class="col-sm-10">
+                                <input asp-for="PhoneNumber" class="form-control" />
+                            </div>
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <label asp-for="Email" class="col-sm-2 col-form-label">邮箱</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Email" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                  
+                    <div class="row">
+                        <div class="form-group">
+                            <a asp-action="UserList" class="btn btn-default">取消</a>
+                            <input type="submit" value="确定" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/chosen/chosen.jquery.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            $(function () {
+                $(".chosen-deselect").chosen(
+                    {
+                        allow_single_deselect: true
+                    });
+                $(".chosen").chosen(
+                    {
+                        placeholder_text_multiple: "--请选择--"
+                    });
+                $(".chosen").chosen().change();
+                $(".chosen").trigger('liszt:updated');
+            });
+        });
+    </script>
+
+}
+

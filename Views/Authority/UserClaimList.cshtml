@@ -1,0 +1,56 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@model IEnumerable<Claim>
+@{
+    ViewData["Title"] = "用户详情";
+}
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>用户详情</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="index.html">主页</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>用户详情</a>
+            </li>
+        </ol>
+    </div>
+</div>
+<br />
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <table class="table table-striped">
+        
+        @foreach (Claim claim in Model.OrderBy(x => x.Type))
+        {
+    <tr>
+       
+        @if (@Html.ClaimType(claim.Type) == "PostName")
+        {
+            <td>职务</td>
+            <td>@claim.Value</td>
+        }
+        else if (@Html.ClaimType(claim.Type) == "DeptName")
+        {
+            <td>部门</td>
+            <td>@claim.Value</td>
+        }
+        else if (@Html.ClaimType(claim.Type) == "PhoneNumber")
+        {
+            <td>电话</td>
+            <td>@claim.Value</td>
+        }
+        else if (@Html.ClaimType(claim.Type) == "Email")
+        {
+            <td>邮箱</td>
+            <td>@claim.Value</td>
+        }
+    </tr>
+        }
+
+    </table>
+}

@@ -1,0 +1,145 @@
+﻿
+@model IEnumerable<JNGH_IDENDITY.Models.ViewDepartments>
+
+@{
+    ViewData["Title"] = "部门管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ 
+@section Styles{
+    <link href="~/lib/footable/css/footable.core.css" rel="stylesheet" />
+    <link href="~/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>部门管理</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="index.html">主页</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>权限管理</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>部门管理</a>
+            </li>
+        </ol>
+    </div>
+</div>
+<br />
+<p>
+    <a asp-action="CreateDept" class="btn btn-w-m btn-primary">新增部门</a>
+</p>
+<div class="form-group ">
+    <form action="DeptList">
+        <div class="input-group">
+            <label class="col-lg-1 col-form-label" style="text-align:right">部门名称</label>
+            <input type="text" name="SearchDeptString" />
+            <input type="submit" value="查询" class="btn btn-primary" style="margin-left:10px;" />
+        </div>
+    </form>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="footable table table-stripped toggle-arrow-tiny">
+                        <thead>
+                            <tr>
+                                <th>
+                                    序号
+                                </th>
+                                <th>
+                                    部门编号
+                                </th>
+                                <th>
+                                    部门名称
+                                </th>
+                                <th>
+                                    部门等级
+                                </th>
+                                <th>
+                                    所属公司
+                                </th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DeptOrder)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DeptId)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DeptName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DeptLevel)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CompName)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("编辑", "EditDept", new { deptid = item.DeptId, compid = item.CompId }, new { @class = "btn btn-primary btn-sm " }) |
+                                        @Html.ActionLink("删除", "DeleteDept", new { deptid = item.DeptId, compid = item.CompId },new { @class= "btn btn-danger btn-sm", @onclick = "return confirm('确认删除？')" }) |
+                                        @Html.ActionLink("职务详情", "SetPosition", new
+                                        {
+                                            deptid = item.DeptId,
+                                            compid = item.CompId,
+                                            deptName = item.DeptName,
+                                            compName = item.CompName
+                                        }, new { @class = "btn btn-warning btn-sm " }) |
+                                        @Html.ActionLink("新增职务", "CreatePosition", new
+                                   {
+                                       deptid = item.DeptId,
+                                       compid = item.CompId,
+                                       deptName = item.DeptName,
+                                       compName = item.CompName
+                                   }, new { @class = "btn btn-primary btn-sm " })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <ul class="pagination float-right"></ul>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/footable/dist/footable.all.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.footable').footable();
+            $('.footable2').footable();
+ 
+
+        });
+    </script>
+}
+ 

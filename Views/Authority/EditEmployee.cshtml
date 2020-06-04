@@ -1,0 +1,154 @@
+﻿@model JNGH_IDENDITY.Models.CreateEmployee
+
+@{
+    ViewData["Title"] = "编辑员工";
+}
+<link href="~/lib/chosen/bootstrap-chosen.css" rel="stylesheet">
+<link href="~/lib/chosen/chosen.css" rel="stylesheet">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>编辑员工</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="index.html">主页</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>权限管理</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>员工管理</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>编辑员工</a>
+            </li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight ecommerce" style="overflow:auto">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ibox-content">
+                <form asp-action="EditEmployee">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden" asp-for="EmpId" />
+                    <div class="col-md-12">
+
+                        <div class="form-group row">
+                            <label asp-for="EmpNo" class="col-sm-2 col-form-label">员工编号</label>
+                            <div class="col-sm-10">
+                                <input asp-for="EmpNo" class="form-control" readonly="readonly" />
+                            </div>
+                            <span asp-validation-for="EmpNo" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <label asp-for="EmpName" class="col-sm-2 col-form-label">员工姓名</label>
+                            <div class="col-sm-10">
+                                <input asp-for="EmpName" class="form-control" readonly="readonly" />
+                            </div>
+                            <span asp-validation-for="EmpName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <label asp-for="MobilePhone" class="col-sm-2 col-form-label">手机号</label>
+                            <div class="col-sm-10">
+                                <input asp-for="MobilePhone" class="form-control" />
+                            </div>
+                            <span asp-validation-for="MobilePhone" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <label asp-for="Email" class="col-sm-2 col-form-label">邮箱</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Email" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">职务</label>
+                            <div class="col-sm-10">
+                                <div class="control-label">
+                                    @Html.DropDownList("PostId", ViewBag.PostList as IEnumerable<SelectListItem>, new { @class = "form-control m-b" })
+                                </div>
+                            </div>
+                            <span asp-validation-for="PostId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">部门</label>
+                            <div class="col-sm-10">
+                                <div class="control-label">
+                                    @Html.DropDownList("DeptId", ViewBag.DeptList as IEnumerable<SelectListItem>, new { @class = "form-control m-b" })
+                                </div>
+                                <span asp-validation-for="DeptId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">所属公司</label>
+                            <div class="col-sm-10">
+                                <div class="control-label">
+                                    @Html.DropDownList("CompId", ViewBag.CompList as IEnumerable<SelectListItem>, new { @class = "form-control m-b" })
+                                </div>
+                            </div>
+                            <span asp-validation-for="CompId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="i-checks">
+                                <label>
+                                    <input asp-for="IsUser" type="checkbox" id="checkboxIsUser">
+                                    是否是系统用户
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="SelectRole">
+                            <label class="col-sm-2 col-form-label">角色</label>
+                            <div class="col-sm-10">
+                                @Html.DropDownList("RoleIds", ViewBag.RoleList as IEnumerable<SelectListItem>, new { @class = "form-control chosen ", multiple = "multiple" })
+                            </div>
+                            <div class="text-danger"> @Html.ValidationMessage("RoleIdsCannotNull")</div>
+                        </div>
+                        
+                    </div>
+
+                        <div class="form-group row">
+                            <a asp-action="EmployeeList" class="btn btn-default">取消</a>
+                            <input type="submit" value="确定" class="btn btn-primary" />
+                        </div>
+                   
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/chosen/chosen.jquery.js"></script>
+    <script type="text/javascript">
+        
+            $(function () {
+                $(function () {
+                    $(".chosen-deselect").chosen(
+                        {
+                            allow_single_deselect: true
+                        });
+                    $(".chosen").chosen(
+                        {
+                            placeholder_text_multiple: "--请选择--"
+                        });
+                    $(".chosen").chosen().change();
+                    $(".chosen").trigger('liszt:updated');
+                });
+            });
+           
+       
+    </script>
+}

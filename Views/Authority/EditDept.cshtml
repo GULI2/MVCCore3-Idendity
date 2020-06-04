@@ -1,0 +1,83 @@
+﻿@model JNGH_IDENDITY.Models.ViewDepartments
+
+@{
+    ViewData["Title"] = "编辑部门";
+}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>编辑部门</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="index.html">主页</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>权限管理</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>部门管理</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>编辑部门</a>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight ecommerce" style="overflow:auto">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ibox-content">
+                <form asp-action="EditDept" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label asp-for="DeptId" class="col-sm-2 col-form-label"></label>
+                            <div class="col-sm-10">
+                                <input asp-for="DeptId" class="form-control" readonly="readonly" />
+                            </div>
+                            <span asp-validation-for="DeptId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="DeptName" class="col-sm-2 col-form-label"></label>
+                            <div class="col-sm-10">
+                                <input asp-for="DeptName" class="form-control" readonly="readonly" />
+                            </div>
+                            <span asp-validation-for="DeptName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label asp-for="DeptLevel" class="col-sm-2 col-form-label"></label>
+                            <div class="col-sm-10">
+                                <input asp-for="DeptLevel" class="form-control" />
+                            </div>
+                            <span asp-validation-for="DeptLevel" class="text-danger"></span>
+                        </div>
+                        
+
+                        <div class="form-group row">
+                            <label asp-for="CompId" class="col-sm-2 col-form-label">所属公司</label>
+                            <div class="col-sm-10">
+                                @Html.DropDownList("CompId", ViewBag.CompList as IEnumerable<SelectListItem>, new { @class = "form-control m-b" })
+                                @foreach (var each in ViewBag.CompList)
+                                {
+                                    if (each.Value == Convert.ToString(ViewBag.CompId))
+                                    {
+                                        each.Selected = true;
+                                    }
+                                }
+                            </div>
+                            <span asp-validation-for="CompId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <a asp-action="DeptList" class="btn btn-default">取消</a>
+                            <input type="submit" value="确定" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

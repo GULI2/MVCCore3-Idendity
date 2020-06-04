@@ -1,0 +1,102 @@
+﻿@model IEnumerable<JNGH_IDENDITY.Models.ViewPositions>
+
+@{
+    ViewData["Title"] = "职务详情";
+}
+
+
+@section Styles{
+    <link href="~/lib/footable/css/footable.core.css" rel="stylesheet" />
+}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>职务详情</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="index.html">主页</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>权限管理</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>部门管理</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>职务详情</a>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PostOrder)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PostLevel)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PostName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DeptName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.FullName)
+                                </th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PostOrder)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PostLevel)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PostName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DeptName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FullName)
+                                    </td>
+
+                                    <td>
+                                        @Html.ActionLink("删除", "DeletePosition", new { postId = item.PostId, deptId = item.DeptId, compId = item.CompId }, new { @class = "btn btn-danger btn-sm", @onclick = "return confirm('确认删除？')" })
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a asp-action="DeptList" class="btn btn-primary">返回</a>
+</div>
