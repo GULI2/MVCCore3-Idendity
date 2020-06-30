@@ -22,22 +22,15 @@ namespace JNGH_IDENDITY.Models
         public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
-        public virtual DbSet<FwContractAudits> FwContractAudits { get; set; }
-        public virtual DbSet<FwContractFiles> FwContractFiles { get; set; }
-        public virtual DbSet<FwContractSubmits> FwContractSubmits { get; set; }
-        public virtual DbSet<FwContracts> FwContracts { get; set; }
         public virtual DbSet<SysCompanies> SysCompanies { get; set; }
         public virtual DbSet<SysDepartments> SysDepartments { get; set; }
         public virtual DbSet<SysEmpPositions> SysEmpPositions { get; set; }
         public virtual DbSet<SysEmployees> SysEmployees { get; set; }
         public virtual DbSet<SysMenus> SysMenus { get; set; }
         public virtual DbSet<SysPositions> SysPositions { get; set; }
-        public virtual DbSet<ViewAuditedContractsList> ViewAuditedContractsList { get; set; }
-        public virtual DbSet<ViewAuditingContractsList> ViewAuditingContractsList { get; set; }
-        public virtual DbSet<ViewContractsStatus> ViewContractsStatus { get; set; }
-        public virtual DbSet<ViewNewContractsList> ViewNewContractsList { get; set; }
         public virtual DbSet<ViewEmployees> ViewEmployees { get; set; }
         public virtual DbSet<ViewUser> ViewUser { get; set; }
+        public virtual DbSet<ViewOrganizationTree> ViewOrganizationTree { get; set; }
         public object Configuration { get; internal set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -149,75 +142,7 @@ namespace JNGH_IDENDITY.Models
                 entity.Property(e => e.UserName).HasMaxLength(256);
             });
 
-            modelBuilder.Entity<FwContractAudits>(entity =>
-            {
-                entity.ToTable("fw_Contract_Audits");
-
-                entity.Property(e => e.AuditMemo).HasMaxLength(200);
-
-                entity.Property(e => e.CheckTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Checker).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<FwContractFiles>(entity =>
-            {
-                entity.ToTable("fw_Contract_Files");
-
-                entity.Property(e => e.FileDatas).HasColumnType("image");
-
-                entity.Property(e => e.FileExtension)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.FileName)
-                    .IsRequired()
-                    .HasMaxLength(200);
-
-                entity.Property(e => e.FilePath).HasMaxLength(500);
-            });
-
-            modelBuilder.Entity<FwContractSubmits>(entity =>
-            {
-                entity.ToTable("fw_Contract_Submits");
-
-                entity.Property(e => e.SubMemo).HasMaxLength(200);
-
-                entity.Property(e => e.SubTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Submiter).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<FwContracts>(entity =>
-            {
-                entity.ToTable("fw_Contracts");
-
-                entity.Property(e => e.CompId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ContName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.ContNo)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CreateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Creater).HasMaxLength(50);
-
-                entity.Property(e => e.DeptId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.SubOrder).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.Submitter).HasMaxLength(50);
-            });
-
+         
             modelBuilder.Entity<SysCompanies>(entity =>
             {
                 entity.HasKey(e => e.CompId)
@@ -450,209 +375,7 @@ namespace JNGH_IDENDITY.Models
                 entity.Property(e => e.Remarks).HasMaxLength(200);
             });
 
-            modelBuilder.Entity<ViewAuditedContractsList>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("View_AuditedContractsList");
-
-                entity.Property(e => e.AuditMemo).HasMaxLength(200);
-
-                entity.Property(e => e.AuditStatusText)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CheckTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Checker).HasMaxLength(50);
-
-                entity.Property(e => e.CompId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ContFile)
-                    .IsRequired()
-                    .HasMaxLength(14)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ContName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.ContNo)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CreateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Creater).HasMaxLength(50);
-
-                entity.Property(e => e.DeptId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.DeptName).HasMaxLength(100);
-
-                entity.Property(e => e.FileUrl).HasMaxLength(249);
-
-                entity.Property(e => e.ShortName).HasMaxLength(50);
-
-                entity.Property(e => e.SubMemo).HasMaxLength(200);
-
-                entity.Property(e => e.SubTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Submitter).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<ViewAuditingContractsList>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("View_AuditingContractsList");
-
-                entity.Property(e => e.AuditMemo).HasMaxLength(200);
-
-                entity.Property(e => e.AuditStatusText)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CheckTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Checker).HasMaxLength(50);
-
-                entity.Property(e => e.CompId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ContFile)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ContName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.ContNo)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ContStatusText)
-                    .IsRequired()
-                    .HasMaxLength(8)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CreateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.DeptId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.DeptName).HasMaxLength(100);
-
-                entity.Property(e => e.FileUrl).HasMaxLength(500);
-
-                entity.Property(e => e.ShortName).HasMaxLength(50);
-
-                entity.Property(e => e.SubMemo).HasMaxLength(200);
-
-                entity.Property(e => e.SubTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Submitter).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<ViewContractsStatus>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("View_ContractsStatus");
-
-                entity.Property(e => e.AuditMemo).HasMaxLength(200);
-
-                entity.Property(e => e.AuditStatusText)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CheckTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Checker).HasMaxLength(50);
-
-                entity.Property(e => e.CompId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ContName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.ContNo)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ContStatusText)
-                    .IsRequired()
-                    .HasMaxLength(8)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CreateTime).HasColumnType("datetime");
-
-                entity.Property(e => e.DeptId)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.DeptName).HasMaxLength(100);
-
-                entity.Property(e => e.ShortName).HasMaxLength(50);
-
-                entity.Property(e => e.SubMemo).HasMaxLength(200);
-
-                entity.Property(e => e.SubTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Submiter).HasMaxLength(50);
-
-                entity.Property(e => e.Submitter).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<ViewNewContractsList>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("View_NewContractsList");
-
-                entity.Property(e => e.ContFile)
-                    .IsRequired()
-                    .HasMaxLength(6)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ContName)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.ContNo)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Creater).HasMaxLength(50);
-
-                entity.Property(e => e.DeptName).HasMaxLength(100);
-
-                entity.Property(e => e.FileUrl).HasMaxLength(280);
-
-                entity.Property(e => e.MobilePhone)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ShortName).HasMaxLength(50);
-
-                entity.Property(e => e.Submitter).HasMaxLength(50);
-            });
+          
 
             modelBuilder.Entity<ViewEmployees>(entity =>
             {
@@ -734,6 +457,15 @@ namespace JNGH_IDENDITY.Models
 
                 entity.Property(e => e.ShortName).HasMaxLength(50);
 
+            });
+
+            modelBuilder.Entity<ViewOrganizationTree>(entity =>
+            {
+                entity.ToView("View_OrganizationTree");
+                entity.Property(e => e.Id);
+                entity.Property(e => e.ParentId);
+                entity.Property(e => e.Name);
+                entity.Property(e => e.DataType);
             });
 
             OnModelCreatingPartial(modelBuilder);

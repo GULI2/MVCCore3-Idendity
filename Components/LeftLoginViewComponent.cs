@@ -33,50 +33,37 @@ namespace JNGH_IDENDITY.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            if (!string.IsNullOrWhiteSpace(User.Identity.Name))
-            {
-                var curuser = await _userManager.FindByNameAsync(User.Identity.Name);
-                var role = await _userManager.GetRolesAsync(curuser);
-               
-                //added by gl
-                ViewUser userView = _context.ViewUser.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
+            TopNavBarInfo info = new TopNavBarInfo();
+                if (_signinManager.IsSignedIn((System.Security.Claims.ClaimsPrincipal)User))
+                {
+                    var loginuser = await _context.ViewEmployees.FirstOrDefaultAsync(e => e.EmpId == User.Identity.Name);
 
-                ClaimsIdentity identity = (ClaimsIdentity)User.Identity;
-                if (identity.FindFirst("EmpName") != null)
-                {
-                    identity.RemoveClaim(identity.FindFirst("EmpName"));
-                }
-                List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim("EmpName", userView.EmpName, ClaimValueTypes.String, "RemoteClaims"));
-                identity.AddClaims(claims);
-                //end of add
-               
-                if (role.Count > 0)
-                {
-                    //ViewBag.RoleName = role[0].ToString();
-                    for (int i=0;i<role.Count; i++)
+                    if (loginuser == null)
                     {
-                        if (i==(role.Count-1))
-                        {
-                            ViewBag.RoleName += role[i].ToString();
-                        }
-                        else
-                        {
-                            ViewBag.RoleName += role[i].ToString()+",";
-                        }
+                        info.UserId = User.Identity.Name;
+                        info.UserName = User.Identity.Name;
+                        info.DeptName = "";
+                        info.PositionName = "";
+                    }
+                    else
+                    {
+                        info.UserId = loginuser.EmpId;
+                        info.UserName = loginuser.EmpName;
+                        info.DeptName = loginuser.DeptName;
+                        info.PositionName = loginuser.PostName;
                     }
                 }
                 else
                 {
-                    ViewBag.RoleName = "";
+                    info.UserId = "";
+                    info.UserName = "";
+                    info.DeptName = "";
+                    info.PositionName = "";
+                    info.ComplaintCount = 0;
+                    info.ComplaintTime = "";
                 }
-            }
-            else
-            {
-                ViewBag.RoleName = "";
-            }
-
-            return View();//此处没有返回ViewName 对应的视图文件是Default.cshtml
+             
+                return View(info);//此处没有返回ViewName 对应的视图文件是Default.cshtml
                           //return View("D", pageList);//此处返回的ViewName 是“D” 对应的视图文件是D.cshtml
         }
     }

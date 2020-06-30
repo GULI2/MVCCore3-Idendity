@@ -8,8 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Nancy.Json;
+using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -40,7 +41,7 @@ namespace JNGH_IDENDITY.Controllers
 
         #region 用户管理
         [HttpGet]
-        public async Task<IActionResult> UserList(string EmpName, string PostId, string DeptId,string IsEnable)
+        public async Task<IActionResult> UserList(string EmpName, string PostId, string DeptId, string IsEnable)
         {
 
             SelectLists();
@@ -99,8 +100,13 @@ namespace JNGH_IDENDITY.Controllers
             }
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser() { UserName = model.UserName,
-                    Email = model.Email, PhoneNumber = model.PhoneNumber, EmailConfirmed = true };
+                var user = new IdentityUser()
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+                    EmailConfirmed = true
+                };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
@@ -252,7 +258,7 @@ namespace JNGH_IDENDITY.Controllers
 
         public async Task<IActionResult> DeleteUser(string id)
         {
-           await DeleteUserAsyncDLL(id);
+            await DeleteUserAsyncDLL(id);
             return RedirectToAction("UserList");
         }
 
@@ -288,8 +294,8 @@ namespace JNGH_IDENDITY.Controllers
                 }
             }
             await _context.SaveChangesAsync();
-           
-            
+
+
         }
         /*
         [HttpGet]
@@ -319,11 +325,11 @@ namespace JNGH_IDENDITY.Controllers
         //账号禁用/启用
         public async Task<IActionResult> ChangeLoginTag(string UserId)
         {
-            AspNetUsers user = _context.AspNetUsers.Where(u => u.Id ==  UserId).FirstOrDefault();
+            AspNetUsers user = _context.AspNetUsers.Where(u => u.Id == UserId).FirstOrDefault();
 
             if (user != null)
             {
-                if (user.LockoutEnd==null)
+                if (user.LockoutEnd == null)
                 {
                     ViewBag.text = "禁用";
                     user.LockoutEnd = DateTime.MaxValue;
@@ -365,16 +371,16 @@ namespace JNGH_IDENDITY.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _context.AspNetRoles.AnyAsync(u=>u.Id==model.Id))
+                if (await _context.AspNetRoles.AnyAsync(u => u.Id == model.Id))
                 {
-                    ModelState.AddModelError("RoleIdIsExist","该编码已存在，请重新设置！");
+                    ModelState.AddModelError("RoleIdIsExist", "该编码已存在，请重新设置！");
                     return View(model);
                 }
                 AspNetRoles role = new AspNetRoles()
                 {
                     Creator = User.Identity.Name,
                     CreateTime = DateTime.Now,
-                    Id =model.Id,
+                    Id = model.Id,
                     Name = model.Name,
                     RoleDescription = model.RoleDescription
                 };
@@ -481,7 +487,7 @@ namespace JNGH_IDENDITY.Controllers
         public async Task<IActionResult> CreateDept(SysDepartments model)
         {
             if (ModelState.IsValid)
-            { 
+            {
                 if (!CheckDeptId(model))
                 {
                     ModelState.AddModelError("deptIdExist", "该部门编码已存在，请重新输入！");
@@ -539,10 +545,10 @@ namespace JNGH_IDENDITY.Controllers
         {
             if (ModelState.IsValid)
             {
-                
-                    _context.Entry(model).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                
+
+                _context.Entry(model).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction("DeptList");
             }
 
@@ -578,7 +584,7 @@ namespace JNGH_IDENDITY.Controllers
         #endregion
 
         #region  职务详情
-        public async Task<IActionResult> SetPosition(string deptid, string compid, 
+        public async Task<IActionResult> SetPosition(string deptid, string compid,
             string deptName, string compName)
         {
             ViewBag.deptid = deptid;
@@ -617,22 +623,22 @@ namespace JNGH_IDENDITY.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePosition(ViewPositions model)
         {
-            
-                if (ModelState.IsValid)
+
+            if (ModelState.IsValid)
+            {
+                SysPositions sysPositions = new SysPositions()
                 {
-                    SysPositions sysPositions = new SysPositions()
-                    {
-                        PostId = Guid.NewGuid().ToString(),
-                        DeptId = model.DeptId,
-                        CompId = model.CompId,
-                        PostName = model.PostName,
-                        PostLevel = model.PostLevel 
-                    };
-                    _context.Add(sysPositions);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("DeptList");
-                }
-            
+                    PostId = Guid.NewGuid().ToString(),
+                    DeptId = model.DeptId,
+                    CompId = model.CompId,
+                    PostName = model.PostName,
+                    PostLevel = model.PostLevel
+                };
+                _context.Add(sysPositions);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("DeptList");
+            }
+
             return View(model);
         }
 
@@ -734,7 +740,7 @@ namespace JNGH_IDENDITY.Controllers
                     //并添加用户申明UserClaim
                     if (model.IsUser)
                     {
-                        if (model.RoleIds==null)
+                        if (model.RoleIds == null)
                         {
                             ModelState.AddModelError("RoleIdsCannotNull", "请选择角色！");
                             return View(model);
@@ -746,7 +752,7 @@ namespace JNGH_IDENDITY.Controllers
                         }
                         var user = new IdentityUser()
                         {
-                            Id= model.EmpNo,
+                            Id = model.EmpNo,
                             UserName = model.EmpNo,
                             Email = model.Email,
                             PhoneNumber = model.MobilePhone,
@@ -832,7 +838,7 @@ namespace JNGH_IDENDITY.Controllers
             SelectLists();
 
             ViewEmployees ViewEmployees = await _context.ViewEmployees
-                .Where(u => u.EmpId == empid && u.DeptId == deptid && 
+                .Where(u => u.EmpId == empid && u.DeptId == deptid &&
                 u.CompId == compid && u.PostId == postid)
                 .FirstAsync();
             if (ViewEmployees == null)
@@ -921,13 +927,14 @@ namespace JNGH_IDENDITY.Controllers
                         ModelState.AddModelError("RoleIdsCannotNull", "请选择角色！");
                         return View(model);
                     }
-                    if (model.Password == null)
-                    {
-                        ModelState.AddModelError("PassWordCannotNull", "密码不能为空！");
-                        return View(model);
-                    }
-                    var user = new IdentityUser() {Id=model.EmpNo, UserName = model.EmpNo, Email = model.Email, PhoneNumber = model.MobilePhone, EmailConfirmed = true };
-                    var result = await _userManager.CreateAsync(user, model.Password);
+                    //if (model.Password == null)
+                    //{
+                    //    ModelState.AddModelError("PassWordCannotNull", "密码不能为空！");
+                    //    return View(model);
+                    //}
+                    var user = new IdentityUser() { Id = model.EmpNo, UserName = model.EmpNo, Email = model.Email, PhoneNumber = model.MobilePhone, EmailConfirmed = true };
+                    //默认密码12345678
+                    var result = await _userManager.CreateAsync(user, "12345678");
 
                     if (result.Succeeded)
                     {
@@ -1064,7 +1071,7 @@ namespace JNGH_IDENDITY.Controllers
                 {
                     _context.Entry(each).State = EntityState.Deleted;
                 }
-               await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             //删除账号、删除账号角色关系、删除声明
             await DeleteUserAsyncDLL(employee.EmpNo);
@@ -1137,5 +1144,92 @@ namespace JNGH_IDENDITY.Controllers
             return View(await _userManager.GetClaimsAsync(user));
         }
         #endregion
+
+
+        #region 树
+        // 加载节点
+        public JsonResult GetTreeData()
+        {
+            var items = _context.ViewOrganizationTree
+                 .Select(u => new
+                 {
+                     id = u.Id,
+                     parent = u.ParentId.ToString() == "0" ? "#" : u.ParentId.ToString(), // root必须是# ！
+                    text = u.Name,
+                     type = u.DataType
+                    // children = _context.SysDepartments.Any(p => p.ParentId == u.DeptId) // true|false 是否有子项
+                }
+                 );
+            return Json(items);
+        }
+
+        public ActionResult DeptTree()
+        {
+            return View();
+        }
+        
+        public JsonResult GetRightList(string clickId, string clickType)
+        {
+
+            if (clickType == "comp")//门店
+            {
+                if (clickId == "yxjt")
+                {
+                    var item = _context.SysCompanies.Where(u => u.ParentId == clickId)
+                        .Select(u => new
+                        {
+                            fullName = u.FullName,
+                            parentType = "yxjt"
+                        }
+                        );
+                    return Json(item);
+                }
+                else
+                {
+                    var item2 = _context.SysDepartments.Where(u => u.ParentId == clickId)
+                        .Select(u => new
+                        {
+                            deptOrder = u.DeptOrder,
+                            deptName = u.DeptName,
+                            deptLevel = u.DeptLevel,
+                            parentType = "comp"
+                        });
+                    return Json(item2);
+                }
+
+            }
+            else if (clickType == "dept")
+            {
+                var item3 =_context.ViewEmployees.Where(u => u.DeptId == clickId)
+                       .Select(u => new
+                       {
+                           empNo = u.EmpNo,
+                           empName = u.EmpName,
+                           mobilePhone = u.MobilePhone,
+                           email = u.Email,
+                           postName = u.PostName,
+                           parentType = "dept"
+                       }
+                       );
+                return Json(item3);
+            }
+            else {
+                var item4 = _context.ViewEmployees.Where(u => u.PostId == clickId)
+                          .Select(u => new
+                          {
+                              empNo = u.EmpNo,
+                              empName = u.EmpName,
+                              mobilePhone = u.MobilePhone,
+                              email = u.Email,
+                              postName = u.PostName,
+                              parentType = "post"
+                          }
+                          );
+                return Json(item4);
+            }
+        } 
+        #endregion
     }
+
+
 }

@@ -1,0 +1,123 @@
+﻿
+@{
+    ViewData["Title"] = "DeptTree";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles{
+    <link href="~/lib/jstree/dist/themes/default/style.min.css" rel="stylesheet" />
+}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>组织架构</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="index.html">主页</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>组织结构</a>
+            </li>
+        </ol>
+    </div>
+</div>
+<br />
+
+
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div id="container" class="col-lg-3 fadeInLeft white-bg">
+        </div>
+        <div id="dataList" class="col-lg-9 animated fadeInRight white-bg">
+            <table id="tableDataList" class="ui nine column table celled table-result">
+            </table>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jstree/dist/jstree.min.js"></script>
+    <!--
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+         <script src="~/lib/jstree/dist/jstree.js"></script>
+         <script src="~/lib/jquery/dist/jquery.js"></script>
+        -->
+    <script>
+        $(function () {
+            $('#container').jstree({
+                'core': {
+                    'data': {
+                        "url": "/Authority/GetTreeData/",
+                        "dataType": "json",
+                        'data': function (node) { // 传给服务端点击的节点
+                            return { clickId: node.id };
+                        }
+                    }
+                }
+            });
+
+
+            $('#container').on("changed.jstree", function (e, data) {
+
+                var treeNode = $('#container').jstree(true).get_selected(true)[0];
+                //alert(treeNode.original.id + "  " + treeNode.original.type);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Authority/GetRightList",
+                    data: {
+                        clickId: treeNode.original.id,
+                        clickType: treeNode.original.type
+                    },
+                    dataType: "json",
+                    cache: false,
+                    async: true,
+                    success: function (result) {
+                        //alert(JSON.stringify(result));
+                        //$("#dataList").html(JSON.stringify(result));
+                        //alert(result[0].deptName);
+                        showJson(result);
+                    },
+                    error: function () {
+                    }
+                });
+            });
+
+            function showJson(result) {
+                var table = document.getElementById("tableDataList");
+                table.innerHTML = "";
+                if (result.length > 0) {
+
+                    for (var i = 0; i < result.length; i++) {
+                        if (result[i].parentType == "yxjt") {
+
+                            var row = table.insertRow(i);
+
+                            var c1 = row.insertCell(0);
+                            c1.innerHTML = result[i].fullName;
+                        }
+                        else if (result[i].parentType == "comp") {
+                            var row = table.insertRow(i);
+                            var c1 = row.insertCell(0);
+                            c1.innerHTML = result[i].deptName;
+                            var c2 = row.insertCell(1);
+                            c2.innerHTML = result[i].deptLevel;
+
+                        }
+                        else {
+                            var row = table.insertRow(i);
+                            var c1 = row.insertCell(0);
+                            c1.innerHTML = result[i].empName;
+                            var c2 = row.insertCell(1);
+                            c2.innerHTML = result[i].mobilePhone;
+                            var c3 = row.insertCell(2);
+                            c3.innerHTML = result[i].email;
+                            var c4 = row.insertCell(3);
+                            c4.innerHTML = result[i].postName;
+                        }
+                    }
+                }
+            }
+        });
+
+
+    </script>
+}

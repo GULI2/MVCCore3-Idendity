@@ -26,11 +26,11 @@
         </ol>
     </div>
 </div>
-<!--
+<br />
 <p>
      <a asp-action="CreateUser" class="btn btn-w-m btn-primary" >开设账号</a>
 </p>
--->
+ 
 <br />
 <div class="form-group">
     <form action="UserList">
@@ -126,13 +126,13 @@
                                     </td>
 
                                     <td>
-                                        @Html.ActionLink("修改状态", "ChangeLoginTag", new { UserId = item.Id }, new { @class = "btn btn-primary btn-sm " }) 
+                                        @Html.ActionLink("修改状态", "ChangeLoginTag", new { UserId = item.Id }, new { @class = "btn btn-primary btn-sm " }) | 
                                         
-                                        @*
+                                        
         @Html.ActionLink("重置密码", "ResetPassword", new { id = item.Id ,userName = item.UserName}, new { @class = "btn btn-warning btn-sm " }) |
             @Html.ActionLink("编辑", "EditUser", new { id = item.Id }, new { @class = "btn btn-primary btn-sm" }) |
                                      @Html.ActionLink("删除", "DeleteUser", new { id = item.Id }, new { @class = "btn btn-danger btn-sm", @onclick = "return confirm('确认删除？')" })
-                                        *@
+                                        
                                     </td>
                                 </tr>
                             }

@@ -3,43 +3,33 @@
 @{
     Layout = null;
 }
+<li class="@Html.IsSelected(action: "UserList")"><a href="@Url.Action("UserList", "Authority")">账号管理</a></li>
+<li class="@Html.IsSelected(action: "RoleList")"><a href="@Url.Action("RoleList", "Authority")">角色管理</a></li>
+<li class="@Html.IsSelected(action: "DeptList")"><a href="@Url.Action("DeptList", "Authority")">部门管理</a></li>
+<li class="@Html.IsSelected(action: "DeptTree")"><a href="@Url.Action("DeptTree", "Authority")">组织架构</a></li>
+<li class="@Html.IsSelected(action: "EmployeeList")"><a href="@Url.Action("EmployeeList", "Authority")">员工管理</a></li>
 
-@if (Model == 1)
-{
-    /*
-    <li class="@Html.IsSelected(action: "NoPassAuditList")"><a href="@Url.Action("NoPassAuditList", "Justice")">未通过合同</a></li>
-    <li class="@Html.IsSelected(action: "AuditingList")"><a href="@Url.Action("AuditingList", "Justice")">合同审核</a></li>
-    <li class="@Html.IsSelected(action: "AuditedList")"><a href="@Url.Action("AuditedList", "Justice")">已审核合同</a></li>
-    */
-    <li class="@Html.IsSelected(action: "UserList")"><a href="@Url.Action("UserList", "Authority")">账号管理</a></li>
-    <li class="@Html.IsSelected(action: "RoleList")"><a href="@Url.Action("RoleList", "Authority")">角色管理</a></li>
-    <li class="@Html.IsSelected(action: "DeptList")"><a href="@Url.Action("DeptList", "Authority")">部门管理</a></li>
-    <li class="@Html.IsSelected(action: "EmployeeList")"><a href="@Url.Action("EmployeeList", "Authority")">员工管理</a></li>
-}
-else if (Model == 2)
-{
-    /*
-    <li class="@Html.IsSelected(action: "Create")"><a href="@Url.Action("Create", "Justice")">报审合同</a></li>
-    <li class="@Html.IsSelected(action: "NoPassAuditList")"><a href="@Url.Action("NoPassAuditList", "Justice")">未通过合同</a></li>
-    <li class="@Html.IsSelected(action: "AuditingList")"><a href="@Url.Action("AuditingList", "Justice")">合同审核</a></li>
-    <li class="@Html.IsSelected(action: "AuditProgress")"><a href="@Url.Action("AuditProgress", "Justice")">审核进度</a></li>
-    <li class="@Html.IsSelected(action: "AuditedList")"><a href="@Url.Action("AuditedList", "Justice")">已审核合同</a></li>
-    */
-    <li class="@Html.IsSelected(action: "UserList")"><a href="@Url.Action("UserList", "Authority")">账号管理</a></li>
-    <li class="@Html.IsSelected(action: "RoleList")"><a href="@Url.Action("RoleList", "Authority")">角色管理</a></li>
-    <li class="@Html.IsSelected(action: "DeptList")"><a href="@Url.Action("DeptList", "Authority")">部门管理</a></li>
-    <li class="@Html.IsSelected(action: "EmployeeList")"><a href="@Url.Action("EmployeeList", "Authority")">员工管理</a></li>
-}
-else
-{
-    /*
-    <li class="@Html.IsSelected(action: "Create")"><a href="@Url.Action("Create", "Justice")">报审合同</a></li>
-    <li class="@Html.IsSelected(action: "NoPassAuditList")"><a href="@Url.Action("NoPassAuditList", "Justice")">未通过合同</a></li>
-    <li class="@Html.IsSelected(action: "AuditProgress")"><a href="@Url.Action("AuditProgress", "Justice")">审核进度</a></li>
-    */
-    <li class="@Html.IsSelected(action: "UserList")"><a href="@Url.Action("UserList", "Authority")">账号查询</a></li>
-    <li class="@Html.IsSelected(action: "RoleList")"><a href="@Url.Action("RoleList", "Authority")">角色管理</a></li>
-    <li class="@Html.IsSelected(action: "DeptList")"><a href="@Url.Action("DeptList", "Authority")">部门管理</a></li>
-    <li class="@Html.IsSelected(action: "EmployeeList")"><a href="@Url.Action("EmployeeList", "Authority")">员工管理</a></li>
+@*@if (Model == 1)
+    {
 
-}
+        <li class="@Html.IsSelected(action: "NoPassAuditList")"><a href="@Url.Action("NoPassAuditList", "Justice")">未通过合同</a></li>
+        <li class="@Html.IsSelected(action: "AuditingList")"><a href="@Url.Action("AuditingList", "Justice")">合同审核</a></li>
+        <li class="@Html.IsSelected(action: "AuditedList")"><a href="@Url.Action("AuditedList", "Justice")">已审核合同</a></li>
+                 }
+    else if (Model == 2)
+    {
+
+        <li class="@Html.IsSelected(action: "Create")"><a href="@Url.Action("Create", "Justice")">报审合同</a></li>
+        <li class="@Html.IsSelected(action: "NoPassAuditList")"><a href="@Url.Action("NoPassAuditList", "Justice")">未通过合同</a></li>
+        <li class="@Html.IsSelected(action: "AuditingList")"><a href="@Url.Action("AuditingList", "Justice")">合同审核</a></li>
+        <li class="@Html.IsSelected(action: "AuditProgress")"><a href="@Url.Action("AuditProgress", "Justice")">审核进度</a></li>
+        <li class="@Html.IsSelected(action: "AuditedList")"><a href="@Url.Action("AuditedList", "Justice")">已审核合同</a></li>
+               }
+    else
+    {
+
+        <li class="@Html.IsSelected(action: "Create")"><a href="@Url.Action("Create", "Justice")">报审合同</a></li>
+        <li class="@Html.IsSelected(action: "NoPassAuditList")"><a href="@Url.Action("NoPassAuditList", "Justice")">未通过合同</a></li>
+        <li class="@Html.IsSelected(action: "AuditProgress")"><a href="@Url.Action("AuditProgress", "Justice")">审核进度</a></li>
+    }
+*@
