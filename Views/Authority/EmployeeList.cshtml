@@ -1,5 +1,6 @@
-﻿@model IEnumerable<JNGH_IDENDITY.Models.ViewEmployees>
-
+﻿@*@model IEnumerable<JNGH_IDENDITY.Models.ViewEmployees>*@
+@model PagedList<JNGH_IDENDITY.Models.ViewEmployees>
+@using Webdiyer.AspNetCore
 @{
     ViewData["Title"] = "员工管理";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -38,7 +39,7 @@
     <a asp-action="CreateEmployee" class="btn btn-w-m btn-primary">新增员工</a>
 </p>
 
- 
+
 <div class="form-group ">
     <form action="EmployeeList">
         <div class="input-group">
@@ -108,47 +109,61 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.EmpNo)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.EmpName)
-                                </td>
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EmpNo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EmpName)
+                                    </td>
 
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.MobilePhone)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Email)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.PostName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DeptName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ShortName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.RoleNames)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IsUserName)
-                                </td>
-                                <td>
-                                    @Html.ActionLink("编辑", "EditEmployee", new { empid = item.EmpId, deptid = item.DeptId, compid = item.CompId, postid = item.PostId }, new { @class = "btn btn-primary btn-sm" }) |
-                                    @Html.ActionLink("删除", "DeleteEmployee", new { id = item.EmpId, empNo = item.EmpNo }, new { @class = "btn btn-danger btn-sm", @onclick = "return confirm('确认删除？')" })
-                                    @Html.ActionLink("重置密码", "ResetPassword", new { empNo = item.EmpNo, empName = item.EmpName }, new { @class = "btn btn-warning btn-sm " })
-                                </td>
-                            </tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.MobilePhone)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PostName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DeptName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ShortName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RoleNames)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IsUserName)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("编辑", "EditEmployee", new { empid = item.EmpId, deptid = item.DeptId, compid = item.CompId, postid = item.PostId }, new { @class = "btn btn-primary btn-sm" }) |
+                                        @Html.ActionLink("删除", "DeleteEmployee", new { id = item.EmpId, empNo = item.EmpNo }, new { @class = "btn btn-danger btn-sm", @onclick = "return confirm('确认删除？')" })
+                                        @Html.ActionLink("重置密码", "ResetPassword", new { empNo = item.EmpNo, empName = item.EmpName }, new { @class = "btn btn-warning btn-sm " })
+                                    </td>
+                                </tr>
                             }
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="5">
-                                    <ul class="pagination float-right"></ul>
+                                <td colspan="10">
+                                    <nav>
+                                        @Html.Pager(Model, new PagerOptions
+                                   {
+                                       PageIndexParameterName = "pageIndex",
+                                       TagName = "ul",
+                                       CssClass = "pagination float-right",
+                                       CurrentPagerItemTemplate = "<li class=\"page-item active\">" +
+                                        "<a  class=\"page-link\" href=\"javascript:void(0);\">{0}</a></li>",
+                                       DisabledPagerItemTemplate = "<li class=\"page-item disabled\">" +
+                                       "<a class=\"page-link\">{0}</a></li>",
+                                       PagerItemTemplate = "<li class=\"page-item\">{0}</li>",
+                                       PagerItemCssClass = "page-link",
+                                       Id = "bootstrappager"
+                                   })
+                                    </nav>
                                 </td>
                             </tr>
                         </tfoot>
@@ -176,24 +191,12 @@
     <!-- Sweet alert -->
     <script src="js/plugins/sweetalert/sweetalert.min.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        //$(document).ready(function () {
 
-            $('.footable').footable();
-            $('.footable2').footable();
-            $('.demo3').click(function () {
-                swal({
-                    title: "Are you sure?",
-                    text: "You will not be able to recover this imaginary file!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, delete it!",
-                    closeOnConfirm: false
-                }, function () {
-                    swal("Deleted!", "Your imaginary file has been deleted.", "success");
-                });
-            });
-        });
+        //    $('.footable').footable();
+        //    $('.footable2').footable();
+            
+        //});
 
 
     </script>

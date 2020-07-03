@@ -1,4 +1,7 @@
-﻿@model IEnumerable<JNGH_IDENDITY.Models.ViewUser>
+﻿@*@model IEnumerable<JNGH_IDENDITY.Models.ViewUser>*@
+@model PagedList<JNGH_IDENDITY.Models.ViewUser>
+@using Webdiyer.AspNetCore
+
 
 @{
     ViewData["Title"] = "账号管理";
@@ -6,7 +9,8 @@
 }
 
 @section Styles{
-    <link href="~/lib/footable/css/footable.core.css" rel="stylesheet" />
+    @*<link href="~/lib/footable/css/footable.core.css" rel="stylesheet" />*@
+    @*<link rel="stylesheet" type="text/css" href="~/css/pagerstyles.css" />*@
 }
 
 
@@ -28,9 +32,9 @@
 </div>
 <br />
 <p>
-     <a asp-action="CreateUser" class="btn btn-w-m btn-primary" >开设账号</a>
+    <a asp-action="CreateUser" class="btn btn-w-m btn-primary">开设账号</a>
 </p>
- 
+
 <br />
 <div class="form-group">
     <form action="UserList">
@@ -64,7 +68,8 @@
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <table class="footable table table-stripped toggle-arrow-tiny">
+                    @*<table class="footable table table-stripped toggle-arrow-tiny">*@
+                    <table class=" table table-stripped toggle-arrow-tiny">
                         <thead>
                             <tr>
                                 <th>
@@ -126,21 +131,34 @@
                                     </td>
 
                                     <td>
-                                        @Html.ActionLink("修改状态", "ChangeLoginTag", new { UserId = item.Id }, new { @class = "btn btn-primary btn-sm " }) | 
-                                        
-                                        
-        @Html.ActionLink("重置密码", "ResetPassword", new { id = item.Id ,userName = item.UserName}, new { @class = "btn btn-warning btn-sm " }) |
-            @Html.ActionLink("编辑", "EditUser", new { id = item.Id }, new { @class = "btn btn-primary btn-sm" }) |
-                                     @Html.ActionLink("删除", "DeleteUser", new { id = item.Id }, new { @class = "btn btn-danger btn-sm", @onclick = "return confirm('确认删除？')" })
-                                        
+                                        @Html.ActionLink("修改状态", "ChangeLoginTag", new { UserId = item.Id }, new { @class = "btn btn-primary btn-sm " }) |
+                                        @Html.ActionLink("重置密码", "ResetPassword", new { id = item.Id, userName = item.UserName }, new { @class = "btn btn-warning btn-sm " }) |
+                                        @Html.ActionLink("编辑", "EditUser", new { id = item.Id }, new { @class = "btn btn-primary btn-sm" }) |
+                                        @Html.ActionLink("删除", "DeleteUser", new { id = item.Id }, new { @class = "btn btn-danger btn-sm", @onclick = "return confirm('确认删除？')" })
+
                                     </td>
                                 </tr>
                             }
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="5">
-                                    <ul class="pagination float-right"></ul>
+                                <td colspan="10" class="text-center">
+                                    @*<ul class="pagination float-right"></ul>*@
+                                    <nav>
+                                        @Html.Pager(Model, new PagerOptions
+                                   {
+                                            PageIndexParameterName = "pageIndex",
+                                       TagName = "ul",
+                                       CssClass = "pagination float-right",
+                                       CurrentPagerItemTemplate = "<li class=\"page-item active\">" +
+                                        "<a  class=\"page-link\" href=\"javascript:void(0);\">{0}</a></li>",
+                                       DisabledPagerItemTemplate = "<li class=\"page-item disabled\">" +
+                                       "<a class=\"page-link\">{0}</a></li>",
+                                       PagerItemTemplate = "<li class=\"page-item\">{0}</li>",
+                                       PagerItemCssClass = "page-link",
+                                       Id = "bootstrappager"
+                                   })
+                                    </nav>
                                 </td>
                             </tr>
                         </tfoot>
@@ -152,12 +170,12 @@
 </div>
 
 @section Scripts {
-    <script src="~/lib/footable/dist/footable.all.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
+    @*<script src="~/lib/footable/dist/footable.all.min.js"></script>
+        <script type="text/javascript">
+                //$(document).ready(function () {
 
-            $('.footable').footable();
-            $('.footable2').footable();
-        });
-    </script>
+                //    $('.footable').footable();
+                //    $('.footable2').footable();
+                //});
+        </script>*@
 }

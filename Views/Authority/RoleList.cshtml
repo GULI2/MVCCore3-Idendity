@@ -1,4 +1,6 @@
-﻿@model IEnumerable<JNGH_IDENDITY.Models.AspNetRoles>
+﻿@*@model IEnumerable<JNGH_IDENDITY.Models.AspNetRoles>*@
+@model PagedList<JNGH_IDENDITY.Models.AspNetRoles>
+@using Webdiyer.AspNetCore
 
 @{
     ViewData["Title"] = "角色管理";
@@ -6,7 +8,7 @@
 }
 
 @section Styles{
-    <link href="~/lib/footable/css/footable.core.css" rel="stylesheet" />
+    @*<link href="~/lib/footable/css/footable.core.css" rel="stylesheet" />*@
 }
 
 <div class="row wrapper border-bottom white-bg page-heading">
@@ -34,7 +36,7 @@
             <input type="text" name="roleName" />
             <input type="submit" value="查询" class="btn btn-primary" />
         </div>
-</form>
+    </form>
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -52,7 +54,7 @@
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <table class="footable table table-stripped toggle-arrow-tiny">
+                    <table class="table table-stripped toggle-arrow-tiny">
                         <thead>
                             <tr>
                                 <th>
@@ -76,33 +78,46 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Id)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.RoleDescription)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Creator)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CreateTime)
-                                </td>
-
-                                <td>
-                                    @Html.ActionLink("编辑", "EditRole", new { id = item.Id }, new { @class = "btn btn-primary btn-sm " }) |
-                                    @Html.ActionLink("删除", "DeleteRole", new { id = item.Id }, new { @class = "btn btn-danger btn-sm demo1", @onclick = "return confirm('确认删除？')" })
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Id)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RoleDescription)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Creator)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreateTime)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("编辑", "EditRole", new { id = item.Id }, new { @class = "btn btn-primary btn-sm " })
+                                        @Html.ActionLink("删除", "DeleteRole", new { id = item.Id }, new { @class = "btn btn-danger btn-sm demo1", @onclick = "return confirm('确认删除？')" })
+                                    </td>
+                                </tr>
                             }
                         <tfoot>
                             <tr>
-                                <td colspan="5">
-                                    <ul class="pagination float-right"></ul>
+                                <td colspan="10" class="text-center">
+                                    <nav>
+                                        @Html.Pager(Model, new PagerOptions
+                                   {
+                                            PageIndexParameterName = "pageIndex",
+                                       TagName = "ul",
+                                       CssClass = "pagination float-right",
+                                       CurrentPagerItemTemplate = "<li class=\"page-item active\">" +
+                                        "<a  class=\"page-link\" href=\"javascript:void(0);\">{0}</a></li>",
+                                       DisabledPagerItemTemplate = "<li class=\"page-item disabled\">" +
+                                       "<a class=\"page-link\">{0}</a></li>",
+                                       PagerItemTemplate = "<li class=\"page-item\">{0}</li>",
+                                       PagerItemCssClass = "page-link",
+                                       Id = "bootstrappager"
+                                   })
+                                    </nav>
                                 </td>
                             </tr>
                         </tfoot>
@@ -113,28 +128,13 @@
     </div>
 </div>
 @section Scripts {
-    <script src="~/lib/footable/dist/footable.all.min.js"></script>
+    @*<script src="~/lib/footable/dist/footable.all.min.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        //$(document).ready(function () {
 
-            $('.footable').footable();
-            $('.footable2').footable();
-            /*
-            $('.demo1').click(function () {
-                $.ajax({
-                    type: "POST",
-                    url: _url,
-                    async: false,
-                    dataType: 'json',
-                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                    data: {
-                    },
-                    swal({
-                        title: "Welcome in Alerts",
-                        text: "msg"
-                });
-            });
-            */
-        });
-    </script>
+        //    $('.footable').footable();
+        //    $('.footable2').footable();
+
+        //});
+    </script>*@
 }

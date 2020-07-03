@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Webdiyer.AspNetCore;
 
 namespace JNGH_IDENDITY.Controllers
 {
@@ -41,9 +42,9 @@ namespace JNGH_IDENDITY.Controllers
 
         #region 用户管理
         [HttpGet]
-        public async Task<IActionResult> UserList(string EmpName, string PostId, string DeptId, string IsEnable)
+        public async Task<IActionResult> UserList(string EmpName, string PostId, string DeptId, 
+            string IsEnable,int pageIndex=1,int pageSize=10)
         {
-
             SelectLists();
 
             List<SelectListItem> selList = new List<SelectListItem> {
@@ -51,26 +52,33 @@ namespace JNGH_IDENDITY.Controllers
              new SelectListItem { Text = "禁用", Value = "禁用" } };
             ViewBag.IsEnableList = selList.AsEnumerable();
 
-            List<ViewUser> list = await _context.ViewUser.OrderByDescending(u => u.CreateTime)
-                .ToListAsync();
+            List<ViewUser> list =   _context.ViewUser.OrderByDescending(u => u.CreateTime)
+                .ToPagedList(pageIndex , pageSize);
+            int dataCount =await  _context.ViewUser.CountAsync();
             if (!string.IsNullOrEmpty(EmpName))
             {
-                list = list.Where(u => u.EmpName.Contains(EmpName)).ToList();
+                list = list.Where(u => u.EmpName.Contains(EmpName)).ToPagedList(pageIndex , pageSize);
+                dataCount = list.Where(u => u.EmpName.Contains(EmpName)).Count();
             }
             if (!string.IsNullOrEmpty(PostId))
             {
-                list = list.Where(u => u.PostId == PostId).ToList();
+                list = list.Where(u => u.PostId == PostId).ToPagedList(pageIndex , pageSize);
+                 dataCount = list.Where(u => u.PostId == PostId).Count();
             }
             if (!string.IsNullOrEmpty(DeptId))
             {
-                list = list.Where(u => u.DeptId == DeptId).ToList();
+                list = list.Where(u => u.DeptId == DeptId).ToPagedList(pageIndex , pageSize);
+                dataCount = list.Where(u => u.DeptId == DeptId).Count();
             }
             if (!string.IsNullOrEmpty(IsEnable))
             {
-                list = list.Where(u => u.EnableTag == IsEnable).ToList();
+                list = list.Where(u => u.EnableTag == IsEnable).ToPagedList(pageIndex - 1, pageSize);
+                dataCount = list.Where(u => u.EnableTag == IsEnable).Count();
             }
-            return View(list);
+            return View(new PagedList<ViewUser>(list, 
+                pageIndex, pageSize, dataCount) );
         }
+
 
         [HttpGet]
         public ActionResult CreateUser()
@@ -348,15 +356,19 @@ namespace JNGH_IDENDITY.Controllers
 
         #region 角色管理
         [HttpGet]
-        public async Task<IActionResult> RoleList(string roleName)
+        public async Task<IActionResult> RoleList(string roleName,int pageIndex = 1,int pageSize=10)
         {
-            List<AspNetRoles> list = await _context.AspNetRoles.Where(u => !u.IsRemoved).OrderByDescending(u => u.CreateTime)
-                .ToListAsync();
+            List<AspNetRoles> list = await _context.AspNetRoles.Where(u => !u.IsRemoved)
+                .OrderByDescending(u => u.CreateTime)
+                .ThenBy(u=>u.Id)
+                .ToPagedListAsync(pageIndex, pageSize);
+            int dataCount = _context.AspNetRoles.Where(u => !u.IsRemoved).Count();
             if (!string.IsNullOrEmpty(roleName))
             {
-                list = list.Where(u => u.Name.ToLower().Contains(roleName.ToLower())).ToList();
+                list = list.Where(u => u.Name.ToLower().Contains(roleName.ToLower())).ToPagedList(pageIndex, pageSize);
+                dataCount = list.Where(u => u.Name.ToLower().Contains(roleName.ToLower())).Count();
             }
-            return View(list);
+            return View(new PagedList<AspNetRoles>(list,pageIndex,pageSize,dataCount));
         }
 
         [HttpGet]
@@ -451,12 +463,13 @@ namespace JNGH_IDENDITY.Controllers
 
         #region 部门管理
         [HttpGet]
-        public async Task<IActionResult> DeptList(string SearchDeptString)
+        public async Task<IActionResult> DeptList(string SearchDeptString
+            ,int pageIndex=1,int pageSize=10)
         {
             List<ViewDepartments> list = await _context.SysDepartments
                 .Include(u => u.SysCompanies)
                .OrderBy(u => u.DeptId)
-                .OrderBy(u => u.DeptOrder)
+                .ThenBy(u => u.DeptOrder)
                 .Select(u => new ViewDepartments()
                 {
                     DeptId = u.DeptId,
@@ -466,12 +479,14 @@ namespace JNGH_IDENDITY.Controllers
                     DeptLevel = u.DeptLevel,
                     DeptOrder = u.DeptOrder
                 })
-                .ToListAsync();
+                .ToPagedListAsync(pageIndex, pageSize);
+            int dataCount = _context.SysDepartments.Count();
             if (!string.IsNullOrEmpty(SearchDeptString))
             {
-                list = list.Where(u => u.DeptName.Contains(SearchDeptString)).ToList();
+                list = list.Where(u => u.DeptName.Contains(SearchDeptString)).ToPagedList(pageIndex, pageSize);
+                dataCount = list.Where(u => u.DeptName.Contains(SearchDeptString)).Count();
             }
-            return View(list);
+            return View(new PagedList<ViewDepartments>(list, pageIndex, pageSize, dataCount) );
         }
 
         [HttpGet]
@@ -667,7 +682,8 @@ namespace JNGH_IDENDITY.Controllers
 
         #region 员工管理
         [HttpGet]
-        public async Task<IActionResult> EmployeeList(string searchEmpName, string DeptId, string PostId, string IsUser)
+        public async Task<IActionResult> EmployeeList(string searchEmpName, string DeptId, 
+            string PostId, string IsUser,int pageIndex=1,int pageSize=10)
         {
             SelectLists();
             List<SelectListItem> IsUserlist = new List<SelectListItem> {
@@ -676,24 +692,29 @@ namespace JNGH_IDENDITY.Controllers
             ViewBag.IsUser = IsUserlist.AsEnumerable();
             List<ViewEmployees> list = await _context.ViewEmployees
                 .OrderByDescending(u => u.EmpId)
-                .ToListAsync();
+                .ToPagedListAsync(pageIndex, pageSize);
+            int dataCount = _context.ViewEmployees.Count();
             if (!string.IsNullOrEmpty(searchEmpName))
             {
-                list = list.Where(u => u.EmpName.Contains(searchEmpName)).ToList();
+                list = list.Where(u => u.EmpName.Contains(searchEmpName)).ToPagedList(pageIndex, pageSize);
+                dataCount = list.Where(u => u.EmpName.Contains(searchEmpName)).Count();
             }
             if (!string.IsNullOrEmpty(DeptId))
             {
-                list = list.Where(u => u.DeptId == DeptId).ToList();
+                list = list.Where(u => u.DeptId == DeptId).ToPagedList(pageIndex, pageSize);
+                dataCount = list.Where(u => u.DeptId == DeptId).Count();
             }
             if (!string.IsNullOrEmpty(PostId))
             {
-                list = list.Where(u => u.PostId == PostId).ToList();
+                list = list.Where(u => u.PostId == PostId).ToPagedList(pageIndex, pageSize);
+                dataCount = list.Where(u => u.PostId == PostId).Count();
             }
             if (!string.IsNullOrEmpty(IsUser))
             {
-                list = list.Where(u => IsUser == "T" ? u.IsUser : !u.IsUser).ToList();
+                list = list.Where(u => IsUser == "T" ? u.IsUser : !u.IsUser).ToPagedList(pageIndex, pageSize);
+                dataCount = list.Where(u => IsUser == "T" ? u.IsUser : !u.IsUser).Count();
             }
-            return View(list);
+            return View(new PagedList<ViewEmployees>(list,pageIndex,pageSize,dataCount));
         }
 
         [HttpGet]
@@ -1144,7 +1165,6 @@ namespace JNGH_IDENDITY.Controllers
             return View(await _userManager.GetClaimsAsync(user));
         }
         #endregion
-
 
         #region 树
         // 加载节点

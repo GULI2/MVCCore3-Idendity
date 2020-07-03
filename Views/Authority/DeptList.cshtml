@@ -1,13 +1,14 @@
 ﻿
-@model IEnumerable<JNGH_IDENDITY.Models.ViewDepartments>
-
+@*@model IEnumerable<JNGH_IDENDITY.Models.ViewDepartments>*@
+@model PagedList<JNGH_IDENDITY.Models.ViewDepartments>
+@using Webdiyer.AspNetCore
 @{
     ViewData["Title"] = "部门管理";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
- 
+
 @section Styles{
-    <link href="~/lib/footable/css/footable.core.css" rel="stylesheet" />
+    @*<link href="~/lib/footable/css/footable.core.css" rel="stylesheet" />*@
     <link href="~/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
 }
 <div class="row wrapper border-bottom white-bg page-heading">
@@ -55,7 +56,7 @@
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <table class="footable table table-stripped toggle-arrow-tiny">
+                    <table class="  table table-stripped toggle-arrow-tiny">
                         <thead>
                             <tr>
                                 <th>
@@ -97,7 +98,7 @@
                                     </td>
                                     <td>
                                         @Html.ActionLink("编辑", "EditDept", new { deptid = item.DeptId, compid = item.CompId }, new { @class = "btn btn-primary btn-sm " }) |
-                                        @Html.ActionLink("删除", "DeleteDept", new { deptid = item.DeptId, compid = item.CompId },new { @class= "btn btn-danger btn-sm", @onclick = "return confirm('确认删除？')" }) |
+                                        @Html.ActionLink("删除", "DeleteDept", new { deptid = item.DeptId, compid = item.CompId }, new { @class = "btn btn-danger btn-sm", @onclick = "return confirm('确认删除？')" }) |
                                         @Html.ActionLink("职务详情", "SetPosition", new
                                         {
                                             deptid = item.DeptId,
@@ -118,8 +119,22 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="5">
-                                    <ul class="pagination float-right"></ul>
+                                <td colspan="10">
+                                    <nav>
+                                        @Html.Pager(Model, new PagerOptions
+                                   {
+                                       PageIndexParameterName = "pageIndex",
+                                       TagName = "ul",
+                                       CssClass = "pagination float-right",
+                                       CurrentPagerItemTemplate = "<li class=\"page-item active\">" +
+                                        "<a  class=\"page-link\" href=\"javascript:void(0);\">{0}</a></li>",
+                                       DisabledPagerItemTemplate = "<li class=\"page-item disabled\">" +
+                                       "<a class=\"page-link\">{0}</a></li>",
+                                       PagerItemTemplate = "<li class=\"page-item\">{0}</li>",
+                                       PagerItemCssClass = "page-link",
+                                       Id = "bootstrappager"
+                                   })
+                                    </nav>
                                 </td>
                             </tr>
                         </tfoot>
@@ -131,15 +146,14 @@
 </div>
 
 @section Scripts {
-    <script src="~/lib/footable/dist/footable.all.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
+    @*<script src="~/lib/footable/dist/footable.all.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
 
-            $('.footable').footable();
-            $('.footable2').footable();
- 
+                $('.footable').footable();
+                $('.footable2').footable();
 
-        });
-    </script>
+
+            });
+        </script>*@
 }
- 
